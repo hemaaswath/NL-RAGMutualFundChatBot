@@ -1,29 +1,8 @@
-# Phase 1: Data Collection & Corpus Preparation
-playwright==1.52.0
-beautifulsoup4==4.13.4
-lxml>=4.9.0,<5.0.0
-aiohttp==3.9.1
-
-# Phase 2: RAG Pipeline
+# RAG Pipeline & Streamlit UI Dependencies
 openai==1.82.0
 groq==0.9.0
 chromadb==1.0.7
 tiktoken==0.9.0
 sentence-transformers==5.4.1
 python-dotenv==1.1.0
-rich==14.0.0
-
-# Phase 3: Backend API Development
-fastapi==0.115.0
-uvicorn[standard]==0.32.0
-pydantic==2.10.0
-httpx==0.28.0
-
-# Phase 4: Frontend UI Development
 streamlit==1.40.0
-
-# Data Processing
-html5lib==1.1
-PyPDF2==3.0.1
-pandas==2.2.0
-openpyxl==3.1.2
