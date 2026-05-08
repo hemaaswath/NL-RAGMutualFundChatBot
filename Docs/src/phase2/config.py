@@ -4,9 +4,23 @@ Configuration for Phase 2: RAG Pipeline Implementation
 
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
-load_dotenv()
+# Try to load from .env for local development
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    pass
+
+# Helper function to get config from st.secrets or environment variables
+def get_config(key, default=""):
+    try:
+        import streamlit as st
+        if hasattr(st, 'secrets') and key in st.secrets:
+            return st.secrets[key]
+    except:
+        pass
+    return os.getenv(key, default)
 
 # ──────────────────────────────────────────────
 # Project Paths
@@ -32,7 +46,7 @@ MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "2000"))  # Max tokens 
 # LLM Configuration
 # ──────────────────────────────────────────────
 # Using Groq for LLM (already configured in Phase 1)
-GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
+GROQ_API_KEY = get_config("GROQ_API_KEY", "")
 LLM_MODEL = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")  # Groq model
 MAX_RESPONSE_LENGTH = int(os.getenv("MAX_RESPONSE_LENGTH", "200"))  # Max characters in response
 MAX_SENTENCES = int(os.getenv("MAX_SENTENCES", "3"))  # Max sentences in response
