@@ -32,6 +32,8 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     logger.info("Starting RAG Mutual Fund FAQ Assistant API...")
+    from phase2.pipeline import initialize_vector_store
+    initialize_vector_store()
     yield
     logger.info("Shutting down RAG Mutual Fund FAQ Assistant API...")
 

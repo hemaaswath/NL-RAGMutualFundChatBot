@@ -10,7 +10,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import streamlit as st
-from phase2.pipeline import rag_pipeline, get_available_schemes
+from phase2.pipeline import rag_pipeline, get_available_schemes, initialize_vector_store
 
 # ──────────────────────────────────────────────
 # Page Configuration
@@ -95,6 +95,16 @@ Welcome to the Mutual Fund FAQ Assistant! I can help you with factual informatio
 
 Simply ask your question below, and I'll retrieve relevant information from official fund documents.
 """)
+
+# ──────────────────────────────────────────────
+# Initialize Vector Store (runs once per session)
+# ──────────────────────────────────────────────
+@st.cache_resource
+def _ensure_initialized():
+    initialize_vector_store()
+    return True
+
+_ensure_initialized()
 
 # ──────────────────────────────────────────────
 # Example Questions

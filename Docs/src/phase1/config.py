@@ -14,7 +14,7 @@ load_dotenv()
 # Project Paths
 # ──────────────────────────────────────────────
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA_RAW_DIR = Path(os.getenv("DATA_RAW_DIR", PROJECT_ROOT / "data" / "raw"))
 DATA_PROCESSED_DIR = Path(os.getenv("DATA_PROCESSED_DIR", PROJECT_ROOT / "data" / "processed"))
 DATA_CHUNKS_DIR = Path(os.getenv("DATA_CHUNKS_DIR", PROJECT_ROOT / "data" / "chunks"))

@@ -119,6 +119,34 @@ def get_available_schemes() -> list[str]:
         return []
 
 
+def initialize_vector_store() -> None:
+    """
+    Auto-initialize the vector store from processed data if empty.
+    Called on app startup to ensure ChromaDB is populated.
+    """
+    from phase1.vector_store import get_collection_stats, upsert_chunks
+    from phase1.chunker import chunk_all_schemes
+
+    logger.info("Checking vector store initialization...")
+
+    stats = get_collection_stats()
+    total_vectors = stats.get("total_vectors", 0)
+
+    if total_vectors > 0:
+        logger.info(f"Vector store already initialized ({total_vectors} vectors)")
+        return
+
+    logger.warning("Vector store is empty. Building from processed data...")
+
+    chunks = chunk_all_schemes()
+    if not chunks:
+        logger.error("No chunks generated from processed data")
+        return
+
+    result = upsert_chunks(chunks)
+    logger.info(f"Vector store initialized: {result['success']} chunks indexed")
+
+
 def get_cache_stats() -> dict:
     """Get cache statistics."""
     cache = get_cache()
