@@ -1,0 +1,15 @@
+[build]
+builder = "NIXPACKS"
+
+[build.env]
+NIXPACKS_PYTHON_VERSION = "3.11"
+
+[[services]]
+name = "backend"
+command = "uvicorn Docs.src.phase3.api.main:app --host 0.0.0.0 --port $PORT"
+env = ["PORT=8000"]
+
+[[services]]
+name = "frontend"
+command = "streamlit run Docs/src/phase4/app.py --server.port=$PORT --server.address=0.0.0.0"
+env = ["PORT=8501"]

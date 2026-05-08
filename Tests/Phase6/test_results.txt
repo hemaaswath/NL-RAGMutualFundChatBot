@@ -1,0 +1,37 @@
+====================================================================================== test session starts =======================================================================================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\ashhe\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot
+plugins: anyio-4.13.0
+collecting ... collected 28 items
+
+Tests/Phase6/test_cicd_pipeline.py::TestCIPipeline::test_ci_workflow_exists PASSED                                                                                                          [  3%]
+Tests/Phase6/test_cicd_pipeline.py::TestCIPipeline::test_ci_workflow_content PASSED                                                                                                         [  7%]
+Tests/Phase6/test_cicd_pipeline.py::TestCDPipeline::test_cd_workflow_exists PASSED                                                                                                          [ 10%]
+Tests/Phase6/test_cicd_pipeline.py::TestCDPipeline::test_cd_workflow_content PASSED                                                                                                         [ 14%]
+Tests/Phase6/test_cloud_infrastructure.py::TestTerraformConfig::test_main_tf_exists PASSED                                                                                                  [ 17%]
+Tests/Phase6/test_cloud_infrastructure.py::TestTerraformConfig::test_variables_tf_exists PASSED                                                                                             [ 21%]
+Tests/Phase6/test_cloud_infrastructure.py::TestTerraformConfig::test_main_tf_content PASSED                                                                                                 [ 25%]
+Tests/Phase6/test_cloud_infrastructure.py::TestTerraformConfig::test_variables_tf_content PASSED                                                                                            [ 28%]
+Tests/Phase6/test_cloud_infrastructure.py::TestInfrastructureDocumentation::test_infrastructure_readme_exists PASSED                                                                        [ 32%]
+Tests/Phase6/test_cloud_infrastructure.py::TestInfrastructureDocumentation::test_infrastructure_readme_content PASSED                                                                       [ 35%]
+Tests/Phase6/test_containerization.py::TestDockerfileBackend::test_dockerfile_backend_exists PASSED                                                                                         [ 39%]
+Tests/Phase6/test_containerization.py::TestDockerfileBackend::test_dockerfile_backend_content PASSED                                                                                        [ 42%]
+Tests/Phase6/test_containerization.py::TestDockerfileFrontend::test_dockerfile_frontend_exists PASSED                                                                                       [ 46%]
+Tests/Phase6/test_containerization.py::TestDockerfileFrontend::test_dockerfile_frontend_content PASSED                                                                                      [ 50%]
+Tests/Phase6/test_containerization.py::TestDockerCompose::test_docker_compose_exists PASSED                                                                                                 [ 53%]
+Tests/Phase6/test_containerization.py::TestDockerCompose::test_docker_compose_content PASSED                                                                                                [ 57%]
+Tests/Phase6/test_documentation.py::TestDeploymentDocumentation::test_deployment_readme_exists PASSED                                                                                       [ 60%]
+Tests/Phase6/test_documentation.py::TestDeploymentDocumentation::test_deployment_readme_content PASSED                                                                                      [ 64%]
+Tests/Phase6/test_environment_config.py::TestEnvironmentFiles::test_env_example_exists PASSED                                                                                               [ 67%]
+Tests/Phase6/test_environment_config.py::TestEnvironmentFiles::test_env_example_content PASSED                                                                                              [ 71%]
+Tests/Phase6/test_environment_config.py::TestConfigModule::test_config_py_exists PASSED                                                                                                     [ 75%]
+Tests/Phase6/test_environment_config.py::TestConfigModule::test_config_py_content PASSED                                                                                                    [ 78%]
+Tests/Phase6/test_monitoring.py::TestHealthCheck::test_health_check_script_exists PASSED                                                                                                    [ 82%]
+Tests/Phase6/test_monitoring.py::TestHealthCheck::test_health_check_content PASSED                                                                                                          [ 85%]
+Tests/Phase6/test_monitoring.py::TestLoggingConfig::test_logging_config_exists PASSED                                                                                                       [ 89%]
+Tests/Phase6/test_monitoring.py::TestLoggingConfig::test_logging_config_content PASSED                                                                                                      [ 92%]
+Tests/Phase6/test_monitoring.py::TestMonitoringDocumentation::test_monitoring_readme_exists PASSED                                                                                          [ 96%]
+Tests/Phase6/test_monitoring.py::TestMonitoringDocumentation::test_monitoring_readme_content PASSED                                                                                         [100%]
+
+======================================================================================= 28 passed in 0.08s =======================================================================================

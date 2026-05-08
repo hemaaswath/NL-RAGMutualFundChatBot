@@ -1,0 +1,94 @@
+=================================================================== test session starts ===================================================================
+platform win32 -- Python 3.14.4, pytest-9.0.3, pluggy-1.6.0 -- C:\Users\ashhe\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot
+plugins: anyio-4.13.0
+collecting ... collected 54 items
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists PASSED                                                             [  1%]
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_models_exist PASSED                                                            [  3%]
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_rag_service_exists PASSED                                                      [  5%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestHTMLParser::test_parser_module_exists PASSED                                          [  7%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestHTMLParser::test_normalize_text PASSED                                                [  9%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestHTMLParser::test_parse_html_basic PASSED                                              [ 11%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestChunker::test_chunker_module_exists PASSED                                            [ 12%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestChunker::test_chunk_text_basic PASSED                                                 [ 14%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestVectorStore::test_vector_store_module_exists PASSED                                   [ 16%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestVectorStore::test_get_chroma_client PASSED                                            [ 18%]
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestDataQuality::test_data_quality_module_exists PASSED                                   [ 20%]
+Tests/Phase5/5.1_unit_testing/test_embeddings.py::TestEmbeddings::test_embeddings_module_exists PASSED                                               [ 22%]
+Tests/Phase5/5.1_unit_testing/test_embeddings.py::TestEmbeddings::test_generate_single_embedding PASSED                                              [ 24%]
+Tests/Phase5/5.1_unit_testing/test_embeddings.py::TestEmbeddings::test_generate_embeddings_batch PASSED                                              [ 25%]
+Tests/Phase5/5.1_unit_testing/test_refusal_handling.py::TestRefusalHandling::test_refusal_module_exists PASSED                                       [ 27%]
+Tests/Phase5/5.1_unit_testing/test_refusal_handling.py::TestRefusalHandling::test_get_refusal_message PASSED                                         [ 29%]
+Tests/Phase5/5.1_unit_testing/test_refusal_handling.py::TestRefusalHandling::test_handle_advisory_query PASSED                                       [ 31%]
+Tests/Phase5/5.1_unit_testing/test_response_generation.py::TestResponseGeneration::test_generator_module_exists PASSED                               [ 33%]
+Tests/Phase5/5.1_unit_testing/test_response_generation.py::TestResponseGeneration::test_generate_response_basic PASSED                               [ 35%]
+Tests/Phase5/5.1_unit_testing/test_response_generation.py::TestResponseGeneration::test_generate_refusal_response PASSED                             [ 37%]
+Tests/Phase5/5.1_unit_testing/test_retrieval.py::TestRetrieval::test_retriever_module_exists PASSED                                                  [ 38%]
+Tests/Phase5/5.1_unit_testing/test_retrieval.py::TestRetrieval::test_retrieve_basic PASSED                                                           [ 40%]
+Tests/Phase5/5.1_unit_testing/test_retrieval.py::TestRetrieval::test_retrieve_with_scheme_filter PASSED                                              [ 42%]
+Tests/Phase5/5.2_integration_testing/test_api_frontend.py::TestAPIFrontendIntegration::test_api_available_for_frontend PASSED                        [ 44%]
+Tests/Phase5/5.2_integration_testing/test_api_frontend.py::TestAPIFrontendIntegration::test_rag_service_accessible PASSED                            [ 46%]
+Tests/Phase5/5.2_integration_testing/test_api_frontend.py::TestAPIFrontendIntegration::test_phase4_can_access_phase2 PASSED                          [ 48%]
+Tests/Phase5/5.2_integration_testing/test_database.py::TestDatabaseIntegration::test_chromadb_connection PASSED                                      [ 50%]
+Tests/Phase5/5.2_integration_testing/test_database.py::TestDatabaseIntegration::test_collection_access PASSED                                        [ 51%]
+Tests/Phase5/5.2_integration_testing/test_database.py::TestDatabaseIntegration::test_retrieval_from_database PASSED                                  [ 53%]
+Tests/Phase5/5.2_integration_testing/test_e2e_rag.py::TestE2ERAG::test_rag_pipeline_integration PASSED                                               [ 55%]
+Tests/Phase5/5.2_integration_testing/test_e2e_rag.py::TestE2ERAG::test_rag_pipeline_with_cache PASSED                                                [ 57%]
+Tests/Phase5/5.2_integration_testing/test_e2e_rag.py::TestE2ERAG::test_rag_pipeline_with_scheme_filter PASSED                                        [ 59%]
+Tests/Phase5/5.3_functional_testing/test_query_types.py::TestQueryTypes::test_expense_ratio_query PASSED                                             [ 61%]
+Tests/Phase5/5.3_functional_testing/test_query_types.py::TestQueryTypes::test_exit_load_query PASSED                                                 [ 62%]
+Tests/Phase5/5.3_functional_testing/test_query_types.py::TestQueryTypes::test_sip_amount_query PASSED                                                [ 64%]
+Tests/Phase5/5.3_functional_testing/test_query_types.py::TestQueryTypes::test_nav_query PASSED                                                       [ 66%]
+Tests/Phase5/5.3_functional_testing/test_refusal_scenarios.py::TestRefusalScenarios::test_investment_advice_query PASSED                             [ 68%]
+Tests/Phase5/5.3_functional_testing/test_refusal_scenarios.py::TestRefusalScenarios::test_performance_comparison_query PASSED                        [ 70%]
+Tests/Phase5/5.3_functional_testing/test_refusal_scenarios.py::TestRefusalScenarios::test_recommendation_query PASSED                                [ 72%]
+Tests/Phase5/5.4_accuracy_testing/test_citation_accuracy.py::TestCitationAccuracy::test_citations_present_in_response PASSED                         [ 74%]
+Tests/Phase5/5.4_accuracy_testing/test_citation_accuracy.py::TestCitationAccuracy::test_citation_structure PASSED                                    [ 75%]
+Tests/Phase5/5.4_accuracy_testing/test_sample_queries.py::TestSampleQueries::test_sample_query_returns_answer PASSED                                 [ 77%]
+Tests/Phase5/5.4_accuracy_testing/test_sample_queries.py::TestSampleQueries::test_response_length_validation PASSED                                  [ 79%]
+Tests/Phase5/5.5_performance_testing/test_caching.py::TestCaching::test_cache_hit_on_repeated_query PASSED                                           [ 81%]
+Tests/Phase5/5.5_performance_testing/test_caching.py::TestCaching::test_cache_stats PASSED                                                           [ 83%]
+Tests/Phase5/5.5_performance_testing/test_response_time.py::TestResponseTime::test_query_response_time PASSED                                        [ 85%]
+Tests/Phase5/5.5_performance_testing/test_response_time.py::TestResponseTime::test_cached_query_response_time PASSED                                 [ 87%]
+Tests/Phase5/5.6_security_testing/test_api_security.py::TestAPISecurity::test_pydantic_validation PASSED                                             [ 88%]
+Tests/Phase5/5.6_security_testing/test_input_validation.py::TestInputValidation::test_empty_query_handling PASSED                                    [ 90%]
+Tests/Phase5/5.6_security_testing/test_input_validation.py::TestInputValidation::test_very_long_query_handling PASSED                                [ 92%]
+Tests/Phase5/5.6_security_testing/test_input_validation.py::TestInputValidation::test_special_characters_in_query PASSED                             [ 94%]
+Tests/Phase5/5.7_compliance_testing/test_disclaimers.py::TestDisclaimers::test_refusal_templates_exist PASSED                                        [ 96%]
+Tests/Phase5/5.7_compliance_testing/test_disclaimers.py::TestDisclaimers::test_refusal_contains_educational_resources PASSED                         [ 98%]
+Tests/Phase5/5.7_compliance_testing/test_no_advice.py::TestNoAdvice::test_advisory_queries_refused PASSED                                            [100%]
+
+==================================================================== warnings summary =====================================================================
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Docs\src\phase3\api\models\schemas.py:24: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    @validator('query')
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Docs\src\phase3\api\models\schemas.py:30: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    @validator('scheme')
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Docs\src\phase3\api\models\schemas.py:46: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class QueryResponse(BaseModel):
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Docs\src\phase3\api\models\schemas.py:101: PydanticDeprecatedSince20: Pydantic V1 style `@validator` validators are deprecated. You should migrate to Pydantic V2 style `@field_validator` validators, see the migration guide for more details. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    @validator('feedback')
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Docs\src\phase3\api\models\schemas.py:116: PydanticDeprecatedSince20: Support for class-based `config` is deprecated, use ConfigDict instead. Deprecated in Pydantic V2.0 to be removed in V3.0. See Pydantic V2 Migration Guide at https://errors.pydantic.dev/2.13/migration/
+    class ErrorResponse(BaseModel):
+
+Tests/Phase5/5.1_unit_testing/test_api_unit.py::TestAPIUnit::test_api_main_exists
+  C:\Users\ashhe\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\chromadb\telemetry\opentelemetry\__init__.py:128: DeprecationWarning: 'asyncio.iscoroutinefunction' is deprecated and slated for removal in Python 3.16; use inspect.iscoroutinefunction() instead
+    if asyncio.iscoroutinefunction(f):
+
+Tests/Phase5/5.1_unit_testing/test_document_processing.py::TestHTMLParser::test_parser_module_exists
+  C:\Users\ashhe\AppData\Local\Python\pythoncore-3.14-64\Lib\site-packages\PyPDF2\__init__.py:21: DeprecationWarning: PyPDF2 is deprecated. Please move to the pypdf library instead.
+    warnings.warn(
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+----------------------- generated xml file: C:\Users\ashhe\Documents\Nextleap\RAG-MutualFund-ChatBot\Tests\Phase5\junit_report.xml ------------------------
+============================================================= 54 passed, 7 warnings in 27.43s =============================================================

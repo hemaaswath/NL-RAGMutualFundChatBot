@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  # Backend API Service
+  backend:
+    build:
+      context: ../..
+      dockerfile: Docs/Deployment/6.1_containerization/Dockerfile.backend
+    container_name: rag-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app/Docs/src
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - CHROMA_PERSIST_DIR=/app/data/chroma
+    volumes:
+      - ./data:/app/data
+      - ./Docs:/app/Docs
+    networks:
+      - rag-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Frontend UI Service
+  frontend:
+    build:
+      context: ../..
+      dockerfile: Docs/Deployment/6.1_containerization/Dockerfile.frontend
+    container_name: rag-frontend
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONPATH=/app/Docs/src
+    volumes:
+      - ./data:/app/data
+      - ./Docs:/app/Docs
+    networks:
+      - rag-network
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  rag-network:
+    driver: bridge
+
+volumes:
+  chroma-data:

@@ -1,0 +1,67 @@
+[
+  {
+    "scheme_name": "HDFC Mid-Cap Fund (Direct Growth)",
+    "scheme_slug": "hdfc-mid-cap-fund-direct-growth",
+    "category": "Mid Cap",
+    "url": "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
+    "url_type": "html",
+    "final_url": "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
+    "status": 200,
+    "error": null,
+    "timestamp": "2026-05-07",
+    "html_path": "data\\raw\\hdfc-mid-cap-fund-direct-growth.html",
+    "html_size": 548422
+  },
+  {
+    "scheme_name": "HDFC Equity Fund (Direct Growth)",
+    "scheme_slug": "hdfc-equity-fund-direct-growth",
+    "category": "Multi Cap",
+    "url": "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
+    "url_type": "html",
+    "final_url": "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
+    "status": 200,
+    "error": null,
+    "timestamp": "2026-05-07",
+    "html_path": "data\\raw\\hdfc-equity-fund-direct-growth.html",
+    "html_size": 534483
+  },
+  {
+    "scheme_name": "HDFC Focused Fund (Direct Growth)",
+    "scheme_slug": "hdfc-focused-fund-direct-growth",
+    "category": "Focused",
+    "url": "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
+    "url_type": "html",
+    "final_url": "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
+    "status": 200,
+    "error": null,
+    "timestamp": "2026-05-07",
+    "html_path": "data\\raw\\hdfc-focused-fund-direct-growth.html",
+    "html_size": 502817
+  },
+  {
+    "scheme_name": "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
+    "scheme_slug": "hdfc-elss-tax-saver-fund-direct-plan-growth",
+    "category": "ELSS",
+    "url": "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
+    "url_type": "html",
+    "final_url": "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
+    "status": 200,
+    "error": null,
+    "timestamp": "2026-05-07",
+    "html_path": "data\\raw\\hdfc-elss-tax-saver-fund-direct-plan-growth.html",
+    "html_size": 528121
+  },
+  {
+    "scheme_name": "HDFC Large-Cap Fund (Direct Growth)",
+    "scheme_slug": "hdfc-large-cap-fund-direct-growth",
+    "category": "Large Cap",
+    "url": "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth",
+    "url_type": "html",
+    "final_url": "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth",
+    "status": 200,
+    "error": null,
+    "timestamp": "2026-05-07",
+    "html_path": "data\\raw\\hdfc-large-cap-fund-direct-growth.html",
+    "html_size": 518510
+  }
+]

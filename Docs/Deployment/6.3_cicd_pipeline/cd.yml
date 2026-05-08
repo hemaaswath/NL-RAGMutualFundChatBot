@@ -1,0 +1,113 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    name: Build and Push Docker Images
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      
+      - name: Build and push backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Docs/Deployment/6.1_containerization/Dockerfile.backend
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/rag-backend:latest,${{ steps.login-ecr.outputs.registry }}/rag-backend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: Docs/Deployment/6.1_containerization/Dockerfile.frontend
+          push: true
+          tags: ${{ steps.login-ecr.outputs.registry }}/rag-frontend:latest,${{ steps.login-ecr.outputs.registry }}/rag-frontend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy-staging:
+    name: Deploy to Staging
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop'
+    environment:
+      name: staging
+      url: https://staging.example.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Deploy to ECS Staging
+        run: |
+          aws ecs update-service --cluster rag-mutual-fund-staging --service backend --force-new-deployment
+          aws ecs update-service --cluster rag-mutual-fund-staging --service frontend --force-new-deployment
+      
+      - name: Wait for deployment
+        run: |
+          aws ecs wait services-stable --cluster rag-mutual-fund-staging --services backend frontend
+
+  deploy-production:
+    name: Deploy to Production
+    needs: build-and-push
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    environment:
+      name: production
+      url: https://api.example.com
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+      
+      - name: Run pre-deployment tests
+        run: |
+          python Tests/Phase5/run_tests.py
+      
+      - name: Deploy to ECS Production
+        run: |
+          aws ecs update-service --cluster rag-mutual-fund-production --service backend --force-new-deployment
+          aws ecs update-service --cluster rag-mutual-fund-production --service frontend --force-new-deployment
+      
+      - name: Wait for deployment
+        run: |
+          aws ecs wait services-stable --cluster rag-mutual-fund-production --services backend frontend
+      
+      - name: Smoke test
+        run: |
+          curl -f https://api.example.com/api/health || exit 1
+      
+      - name: Notify deployment success
+        if: success()
+        run: echo "Deployment to production successful"
