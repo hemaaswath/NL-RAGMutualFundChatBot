@@ -5,7 +5,7 @@ Implements LLM integration with Groq
 
 from typing import Optional
 from openai import OpenAI
-from .config import GROQ_API_KEY, LLM_MODEL, MAX_SENTENCES, INCLUDE_CITATIONS, INCLUDE_FOOTER
+from .config import GROQ_API_KEY, GROQ_API_URL, LLM_MODEL, MAX_SENTENCES, INCLUDE_CITATIONS, INCLUDE_FOOTER
 from .context import build_prompt, build_prompt_no_context, extract_answer_text, format_response_with_footer
 from .utils import setup_logging, extract_citations
 
@@ -19,7 +19,7 @@ def get_llm_client() -> OpenAI:
     
     return OpenAI(
         api_key=GROQ_API_KEY,
-        base_url="https://api.groq.com/openai/v1"
+        base_url=GROQ_API_URL
     )
 
 

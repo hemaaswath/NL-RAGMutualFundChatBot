@@ -47,6 +47,7 @@ MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "2000"))  # Max tokens 
 # ──────────────────────────────────────────────
 # Using Groq for LLM (already configured in Phase 1)
 GROQ_API_KEY = get_config("GROQ_API_KEY", "")
+GROQ_API_URL = os.getenv("GROQ_API_URL", "https://api.groq.com/openai/v1")
 LLM_MODEL = os.getenv("LLM_MODEL", "llama-3.3-70b-versatile")  # Groq model
 MAX_RESPONSE_LENGTH = int(os.getenv("MAX_RESPONSE_LENGTH", "200"))  # Max characters in response
 MAX_SENTENCES = int(os.getenv("MAX_SENTENCES", "3"))  # Max sentences in response
