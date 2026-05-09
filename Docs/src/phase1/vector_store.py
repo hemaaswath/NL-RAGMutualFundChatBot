@@ -16,6 +16,14 @@ logger = setup_logging("vector_store")
 
 def get_client() -> chromadb.PersistentClient:
     """Get ChromaDB persistent client."""
+    import os
+    from pathlib import Path
+    
+    # Ensure the directory exists
+    chroma_path = Path(CHROMA_PERSIST_DIR)
+    chroma_path.mkdir(parents=True, exist_ok=True)
+    
+    # Create client (ChromaDB 0.4.x compatible)
     return chromadb.PersistentClient(path=CHROMA_PERSIST_DIR)
 
 
