@@ -2,6 +2,10 @@
 Main FastAPI application for Phase 3
 """
 
+import os
+# Disable ChromaDB telemetry before any imports
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError
@@ -32,8 +36,10 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     logger.info("Starting RAG Mutual Fund FAQ Assistant API...")
-    from phase2.pipeline import initialize_vector_store
-    initialize_vector_store()
+    # Skip auto-initialization on deployment since processed data doesn't exist
+    # Data must be built via scheduler or local testing first
+    # from phase2.pipeline import initialize_vector_store
+    # initialize_vector_store()
     yield
     logger.info("Shutting down RAG Mutual Fund FAQ Assistant API...")
 

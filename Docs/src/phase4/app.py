@@ -3,6 +3,10 @@ Phase 4: Frontend UI Development
 Streamlit-based FAQ Assistant Interface
 """
 
+import os
+# Disable ChromaDB telemetry before any imports
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
+
 import sys
 from pathlib import Path
 
@@ -99,12 +103,14 @@ Simply ask your question below, and I'll retrieve relevant information from offi
 # ──────────────────────────────────────────────
 # Initialize Vector Store (runs once per session)
 # ──────────────────────────────────────────────
-@st.cache_resource
-def _ensure_initialized():
-    initialize_vector_store()
-    return True
+# Skip auto-initialization on deployment since processed data doesn't exist
+# Data must be built via scheduler or local testing first
+# @st.cache_resource
+# def _ensure_initialized():
+#     initialize_vector_store()
+#     return True
 
-_ensure_initialized()
+# _ensure_initialized()
 
 # ──────────────────────────────────────────────
 # Example Questions
