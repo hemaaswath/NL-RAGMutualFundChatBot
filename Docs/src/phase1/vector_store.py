@@ -1,13 +1,15 @@
 """
-ChromaDB vector store for Phase 1.
-
-Initializes ChromaDB, creates collection, upserts chunks with embeddings
-and metadata, and provides query/stats methods.
+Vector store management for ChromaDB.
 """
+
+import os
+from .config import CHROMA_PERSIST_DIR, CHROMA_COLLECTION_NAME
+
+# Disable ChromaDB telemetry
+os.environ["ANONYMIZED_TELEMETRY"] = "False"
 
 import chromadb
 
-from .config import CHROMA_COLLECTION_NAME, CHROMA_PERSIST_DIR
 from .embeddings import generate_embeddings
 from .utils import setup_logging
 

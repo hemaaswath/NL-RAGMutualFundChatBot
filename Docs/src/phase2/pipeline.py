@@ -126,25 +126,40 @@ def initialize_vector_store() -> None:
     """
     from phase1.vector_store import get_collection_stats, upsert_chunks
     from phase1.chunker import chunk_all_schemes
+    from pathlib import Path
 
     logger.info("Checking vector store initialization...")
 
-    stats = get_collection_stats()
-    total_vectors = stats.get("total_vectors", 0)
+    try:
+        stats = get_collection_stats()
+        total_vectors = stats.get("total_vectors", 0)
 
-    if total_vectors > 0:
-        logger.info(f"Vector store already initialized ({total_vectors} vectors)")
+        if total_vectors > 0:
+            logger.info(f"Vector store already initialized ({total_vectors} vectors)")
+            return
+
+        logger.warning("Vector store is empty. Building from processed data...")
+
+        # Check if processed data exists
+        from phase1.config import DATA_PROCESSED_DIR
+        processed_dir = Path(DATA_PROCESSED_DIR)
+        if not processed_dir.exists() or not any(processed_dir.iterdir()):
+            logger.error(f"Processed data directory not found or empty: {DATA_PROCESSED_DIR}")
+            logger.warning("Skipping vector store initialization - data must be built first")
+            return
+
+        chunks = chunk_all_schemes()
+        if not chunks:
+            logger.error("No chunks generated from processed data")
+            return
+
+        result = upsert_chunks(chunks)
+        logger.info(f"Vector store initialized: {result['success']} chunks indexed")
+    except Exception as e:
+        logger.error(f"Vector store initialization failed: {e}")
+        logger.warning("Continuing without vector store - queries will return no results")
+        # Don't fail the app startup, just log the error
         return
-
-    logger.warning("Vector store is empty. Building from processed data...")
-
-    chunks = chunk_all_schemes()
-    if not chunks:
-        logger.error("No chunks generated from processed data")
-        return
-
-    result = upsert_chunks(chunks)
-    logger.info(f"Vector store initialized: {result['success']} chunks indexed")
 
 
 def get_cache_stats() -> dict:
