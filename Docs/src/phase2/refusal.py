@@ -42,7 +42,9 @@ def handle_advisory_query(query: str, refusal_type: str) -> dict:
         "citations": [],
         "query_type": "advisory",
         "refusal_type": refusal_type,
-        "success": True
+        "success": True,
+        "chunks_retrieved": 0,
+        "cached": False
     }
 
 
