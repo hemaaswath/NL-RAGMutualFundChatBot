@@ -127,99 +127,71 @@ def initialize_vector_store() -> None:
     from phase1.vector_store import get_collection_stats, upsert_chunks
     from phase1.chunker import chunk_all_schemes
     from pathlib import Path
+    import json
+    import os
 
     logger.info("Checking vector store initialization...")
 
     try:
-        # Debug: Check ChromaDB path
-        from phase1.config import CHROMA_PERSIST_DIR, PROJECT_ROOT
-        logger.info(f"ChromaDB path: {CHROMA_PERSIST_DIR}")
-        logger.info(f"Project root: {PROJECT_ROOT}")
+        # AGGRESSIVE FIX: Always try to rebuild from committed chunks on deployment
+        # This bypasses all path detection issues
+        logger.info("Attempting aggressive fix - rebuilding from committed chunks...")
         
-        # Try multiple path configurations
-        chroma_paths_to_try = [
-            CHROMA_PERSIST_DIR,
-            "./chroma_db",
-            str(PROJECT_ROOT / "chroma_db"),
-            "chroma_db",
-            "/app/chroma_db",  # Common container path
+        # Check if we have committed chunks
+        chunk_paths_to_try = [
+            "data/chunks",
+            "./data/chunks",
+            "Docs/src/data/chunks",
+            "./Docs/src/data/chunks",
+            "/app/data/chunks",
         ]
         
-        working_chroma_path = None
-        for path in chroma_paths_to_try:
-            chroma_path = Path(path)
-            if chroma_path.exists() and any(chroma_path.iterdir()):
-                logger.info(f"Found ChromaDB at: {path}")
-                working_chroma_path = path
-                # Temporarily update the config
-                import phase1.config
-                phase1.config.CHROMA_PERSIST_DIR = path
-                break
-            else:
-                logger.debug(f"ChromaDB not found at: {path}")
+        chunks = []
+        chunks_found = False
         
-        if not working_chroma_path:
-            logger.error("ChromaDB directory not found in any expected location!")
+        for chunk_path in chunk_paths_to_try:
+            chunks_dir = Path(chunk_path)
+            if chunks_dir.exists() and any(chunks_dir.iterdir()):
+                logger.info(f"Found chunks directory at: {chunk_path}")
+                for chunk_file in chunks_dir.glob("*_chunks.json"):
+                    try:
+                        with open(chunk_file, 'r', encoding='utf-8') as f:
+                            file_chunks = json.load(f)
+                            chunks.extend(file_chunks)
+                            logger.info(f"Loaded {len(file_chunks)} chunks from {chunk_file.name}")
+                    except Exception as e:
+                        logger.error(f"Error loading {chunk_file}: {e}")
+                chunks_found = True
+                break
+        
+        if not chunks_found:
+            logger.error("No chunks directory found in any expected location!")
             logger.info(f"Current working directory: {os.getcwd()}")
             logger.info(f"Files in current directory: {list(Path('.').rglob('*')[:10])}")
+            return
         
-        stats = get_collection_stats()
-        total_vectors = stats.get("total_vectors", 0)
-        logger.info(f"Vector store stats: {stats}")
-
-        # Force rebuild if empty or if we're on deployment (always check chunks)
-        if total_vectors > 0:
-            logger.info(f"Vector store already initialized ({total_vectors} vectors)")
-            # Still check if we have chunks to ensure data is fresh
-            from phase1.config import DATA_CHUNKS_DIR
-            chunks_dir = Path(DATA_CHUNKS_DIR)
-            if chunks_dir.exists() and any(chunks_dir.iterdir()):
-                logger.info("Chunks directory exists, vector store should be working")
-            else:
-                logger.warning("Chunks directory not found, may need to rebuild")
-            return
-
-        logger.warning("Vector store is empty. Building from processed data...")
-
-        # Check if processed data exists
-        from phase1.config import DATA_PROCESSED_DIR
-        processed_dir = Path(DATA_PROCESSED_DIR)
-        logger.info(f"Checking processed data directory: {DATA_PROCESSED_DIR}")
-        if not processed_dir.exists() or not any(processed_dir.iterdir()):
-            logger.error(f"Processed data directory not found or empty: {DATA_PROCESSED_DIR}")
-            logger.warning("Skipping vector store initialization - data must be built first")
-            return
-
-        chunks = chunk_all_schemes()
         if not chunks:
-            logger.error("No chunks generated from processed data")
+            logger.error("No chunks loaded from any directory!")
             return
-
+        
+        logger.info(f"Total chunks loaded: {len(chunks)}")
+        
+        # Force rebuild the vector store with these chunks
+        # This will work regardless of path issues
+        logger.info("Force rebuilding vector store with loaded chunks...")
         result = upsert_chunks(chunks)
-        logger.info(f"Vector store initialized: {result['success']} chunks indexed")
+        logger.info(f"Force rebuild result: {result}")
         
         # Verify the vector store now has data
         stats = get_collection_stats()
         total_vectors = stats.get("total_vectors", 0)
-        logger.info(f"After initialization - Vector store stats: {stats}")
+        logger.info(f"After force rebuild - Vector store stats: {stats}")
         
-        if total_vectors == 0:
-            logger.error("Vector store still empty after initialization!")
-            # Try one more time with direct chunk loading
-            logger.warning("Attempting direct chunk loading...")
-            from phase1.config import DATA_CHUNKS_DIR
-            import json
-            chunks_dir = Path(DATA_CHUNKS_DIR)
-            if chunks_dir.exists():
-                chunks = []
-                for chunk_file in chunks_dir.glob("*_chunks.json"):
-                    with open(chunk_file, 'r', encoding='utf-8') as f:
-                        file_chunks = json.load(f)
-                        chunks.extend(file_chunks)
-                if chunks:
-                    logger.info(f"Loaded {len(chunks)} chunks directly from files")
-                    result = upsert_chunks(chunks)
-                    logger.info(f"Direct load result: {result}")
+        if total_vectors > 0:
+            logger.info(f"SUCCESS: Vector store initialized with {total_vectors} vectors")
+        else:
+            logger.error("FAILED: Vector store still empty after force rebuild!")
+            
     except Exception as e:
         logger.error(f"Vector store initialization failed: {e}")
         import traceback
