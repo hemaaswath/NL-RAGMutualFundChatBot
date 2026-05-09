@@ -73,7 +73,8 @@ ADVISORY_KEYWORDS = [
     "should i", "should i invest", "recommend", "advice", "best",
     "which fund is better", "which is better", "compare", "performance comparison",
     "buy", "sell", "hold", "investment advice", "suggest",
-    "good investment", "is this a good", "better for", "which fund should"
+    "good investment", "is this a good", "better for", "which fund should",
+    "which mutual fund is better", "which fund", "better", "comparison"
 ]
 
 FACTUAL_KEYWORDS = [
@@ -85,26 +86,16 @@ FACTUAL_KEYWORDS = [
 # ──────────────────────────────────────────────
 # Refusal Templates
 # ──────────────────────────────────────────────
+COMPLIANCE_MESSAGE = (
+    "I cannot provide investment advice, recommendations, or comparisons. "
+    "For personalized guidance, please consult a SEBI-registered investment advisor."
+)
+
 REFUSAL_TEMPLATES = {
-    "investment_advice": (
-        "I cannot provide investment advice or recommendations. "
-        "Please consult a SEBI-registered investment advisor for personalized guidance. "
-        "For educational resources, visit: https://www.amfiindia.com/ or https://www.sebi.gov.in/"
-    ),
-    "performance_comparison": (
-        "I cannot compare fund performance or recommend one fund over another. "
-        "Please review the fact sheets and consult a financial advisor. "
-        "For educational resources, visit: https://www.amfiindia.com/ or https://www.sebi.gov.in/"
-    ),
-    "recommendation_request": (
-        "I cannot provide investment recommendations. "
-        "Please consult a SEBI-registered investment advisor for personalized guidance. "
-        "For educational resources, visit: https://www.amfiindia.com/ or https://www.sebi.gov.in/"
-    ),
-    "default": (
-        "I can only provide factual information about mutual fund schemes from the available data. "
-        "For investment advice, please consult a SEBI-registered investment advisor."
-    )
+    "investment_advice": COMPLIANCE_MESSAGE,
+    "performance_comparison": COMPLIANCE_MESSAGE,
+    "recommendation_request": COMPLIANCE_MESSAGE,
+    "default": COMPLIANCE_MESSAGE
 }
 
 # ──────────────────────────────────────────────
