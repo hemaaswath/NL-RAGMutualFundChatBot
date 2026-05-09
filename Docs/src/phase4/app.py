@@ -125,14 +125,20 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button(example_questions[0], key="ex1", use_container_width=True):
         st.session_state.query_input = example_questions[0]
+        st.session_state.auto_submit = True
+        st.rerun()
 
 with col2:
     if st.button(example_questions[1], key="ex2", use_container_width=True):
         st.session_state.query_input = example_questions[1]
+        st.session_state.auto_submit = True
+        st.rerun()
 
 with col3:
     if st.button(example_questions[2], key="ex3", use_container_width=True):
         st.session_state.query_input = example_questions[2]
+        st.session_state.auto_submit = True
+        st.rerun()
 
 # ──────────────────────────────────────────────
 # Query Input Section
@@ -149,24 +155,31 @@ if "response" not in st.session_state:
 if "loading" not in st.session_state:
     st.session_state.loading = False
 
-# Query input with character counter
-query = st.text_area(
-    "Enter your question:",
-    value=st.session_state.query_input,
-    max_chars=500,
-    height=100,
-    key="query_text",
-    help="Ask about mutual fund schemes, expense ratios, NAVs, exit loads, etc."
-)
+if "auto_submit" not in st.session_state:
+    st.session_state.auto_submit = False
 
-# Character counter
-char_count = len(query)
-st.caption(f"Characters: {char_count}/500")
+# Use form with text_input for Enter key submission
+with st.form(key="query_form", clear_on_submit=False):
+    query = st.text_input(
+        "Enter your question:",
+        value=st.session_state.query_input,
+        max_chars=500,
+        key="query_text",
+        help="Ask about mutual fund schemes, expense ratios, NAVs, exit loads, etc. Press Enter to submit."
+    )
+    
+    # Character counter
+    char_count = len(query)
+    st.caption(f"Characters: {char_count}/500")
+    
+    # Submit button (Enter key will trigger this with text_input in form)
+    submit_button = st.form_submit_button("🔍 Get Answer", type="primary", use_container_width=True)
 
-# Submit button
-submit_button = st.button("🔍 Get Answer", type="primary", use_container_width=True)
-
-if submit_button:
+# Handle auto-submit from example questions or manual submission
+if submit_button or st.session_state.auto_submit:
+    # Reset auto-submit flag
+    st.session_state.auto_submit = False
+    
     if not query or not query.strip():
         st.error("⚠️ Please enter a question.")
     else:
