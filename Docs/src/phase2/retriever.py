@@ -32,6 +32,7 @@ def retrieve(
     Returns:
         List of retrieved chunks with metadata and scores
     """
+    # Try ChromaDB first
     try:
         # Generate embedding for query
         logger.info(f"Generating embedding for query: {query[:50]}...")
@@ -57,33 +58,36 @@ def retrieve(
         kwargs = {
             "query_embeddings": [embedding],
             "n_results": top_k,
-            "include": ["documents", "metadatas", "distances"]
-        }
-        
-        if filters:
-            kwargs["where"] = filters
-        
-        results = collection.query(**kwargs)
-        
-        # Process results
-        retrieved = []
-        if results["documents"] and len(results["documents"]) > 0:
-            for i in range(len(results["documents"][0])):
-                # Convert distance to similarity score (1 - distance for cosine)
-                distance = results["distances"][0][i]
-                similarity = 1 - distance
-                
-                # Filter by similarity threshold
-                if similarity >= similarity_threshold:
-                    retrieved.append({
-                        "text": results["documents"][0][i],
                         "metadata": results["metadatas"][0][i],
-                        "similarity": similarity,
-                        "distance": distance
+                        "similarity": 1 - results["distances"][0][i],
+                        "distance": results["distances"][0][i]
                     })
+            
+            logger.info(f"Retrieved {len(retrieved_chunks)} chunks (above threshold {similarity_threshold})")
+            return retrieved_chunks
         
-        logger.info(f"Retrieved {len(retrieved)} chunks (above threshold {similarity_threshold})")
-        return retrieved
+        except Exception as e:
+            logger.error(f"ChromaDB retrieval failed: {e}")
+            logger.info("Falling back to memory vector store...")
+            
+            # Fallback to memory store
+            try:
+                from phase1.memory_vector_store import get_memory_store, initialize_memory_store
+                
+                store = get_memory_store()
+                if not store.is_loaded:
+                    logger.info("Initializing memory store...")
+                    if not initialize_memory_store():
+                        logger.error("Failed to initialize memory store!")
+                        return []
+                
+                results = store.query(query, top_k, similarity_threshold)
+                logger.info(f"Memory store retrieved {len(results)} chunks")
+                return results
+                
+            except Exception as fallback_error:
+                logger.error(f"Memory store fallback also failed: {fallback_error}")
+                return []
     
     except Exception as e:
         logger.error(f"Error during retrieval: {e}")
