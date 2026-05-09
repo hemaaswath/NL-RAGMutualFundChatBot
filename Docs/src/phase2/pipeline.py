@@ -131,8 +131,20 @@ def initialize_vector_store() -> None:
     logger.info("Checking vector store initialization...")
 
     try:
+        # Debug: Check ChromaDB path
+        from phase1.config import CHROMA_PERSIST_DIR
+        logger.info(f"ChromaDB path: {CHROMA_PERSIST_DIR}")
+        
+        # Debug: Check if chroma_db exists
+        chroma_path = Path(CHROMA_PERSIST_DIR)
+        if chroma_path.exists():
+            logger.info(f"ChromaDB directory exists with files: {list(chroma_path.rglob('*'))[:5]}")
+        else:
+            logger.warning(f"ChromaDB directory does not exist at: {CHROMA_PERSIST_DIR}")
+        
         stats = get_collection_stats()
         total_vectors = stats.get("total_vectors", 0)
+        logger.info(f"Vector store stats: {stats}")
 
         if total_vectors > 0:
             logger.info(f"Vector store already initialized ({total_vectors} vectors)")
@@ -143,6 +155,7 @@ def initialize_vector_store() -> None:
         # Check if processed data exists
         from phase1.config import DATA_PROCESSED_DIR
         processed_dir = Path(DATA_PROCESSED_DIR)
+        logger.info(f"Checking processed data directory: {DATA_PROCESSED_DIR}")
         if not processed_dir.exists() or not any(processed_dir.iterdir()):
             logger.error(f"Processed data directory not found or empty: {DATA_PROCESSED_DIR}")
             logger.warning("Skipping vector store initialization - data must be built first")
@@ -157,6 +170,8 @@ def initialize_vector_store() -> None:
         logger.info(f"Vector store initialized: {result['success']} chunks indexed")
     except Exception as e:
         logger.error(f"Vector store initialization failed: {e}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         logger.warning("Continuing without vector store - queries will return no results")
         # Don't fail the app startup, just log the error
         return

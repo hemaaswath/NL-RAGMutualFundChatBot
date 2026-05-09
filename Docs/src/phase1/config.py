@@ -18,7 +18,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
 DATA_RAW_DIR = Path(os.getenv("DATA_RAW_DIR", PROJECT_ROOT / "data" / "raw"))
 DATA_PROCESSED_DIR = Path(os.getenv("DATA_PROCESSED_DIR", PROJECT_ROOT / "data" / "processed"))
 DATA_CHUNKS_DIR = Path(os.getenv("DATA_CHUNKS_DIR", PROJECT_ROOT / "data" / "chunks"))
-CHROMA_PERSIST_DIR = str(Path(os.getenv("CHROMA_PERSIST_DIR", PROJECT_ROOT / "chroma_db")))
+# Use absolute path for ChromaDB to ensure it works on deployment
+CHROMA_PERSIST_DIR = str(Path(os.getenv("CHROMA_PERSIST_DIR", PROJECT_ROOT / "chroma_db")).resolve())
 DOCS_PHASE1_DIR = PROJECT_ROOT / "Docs" / "Phase1_DataCollection"
 
 # ──────────────────────────────────────────────
