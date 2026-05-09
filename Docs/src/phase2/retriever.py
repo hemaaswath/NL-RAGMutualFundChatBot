@@ -1,12 +1,11 @@
 """
 Retrieval Mechanism for Phase 2: RAG Pipeline
-Implements semantic search with metadata filtering
+Simple file-based retrieval for Streamlit deployment
 """
 
 from typing import Optional
-from phase1.vector_store import get_client, get_or_create_collection
 from phase1.embeddings import generate_single_embedding
-from .config import TOP_K, SIMILARITY_THRESHOLD, CHROMA_COLLECTION_NAME
+from .config import TOP_K, SIMILARITY_THRESHOLD
 from .utils import setup_logging
 
 logger = setup_logging("retriever")
@@ -20,87 +19,30 @@ def retrieve(
     scheme: Optional[str] = None,
 ) -> list[dict]:
     """
-    Retrieve relevant chunks from vector database using semantic search.
+    Retrieve relevant chunks using simple file-based vector store.
     
     Args:
         query: User query text
         top_k: Number of results to retrieve
         similarity_threshold: Minimum similarity score (0-1)
-        where: Additional metadata filters
+        where: Additional metadata filters (not implemented)
         scheme: Filter by specific scheme name
     
     Returns:
         List of retrieved chunks with metadata and scores
     """
-    # Try ChromaDB first
     try:
-        # Generate embedding for query
-        logger.info(f"Generating embedding for query: {query[:50]}...")
-        embedding = generate_single_embedding(query)
+        # Use simple retriever for Streamlit deployment
+        from .simple_retriever import retrieve_simple
         
-        if embedding is None:
-            logger.error("Failed to generate query embedding")
-            return []
+        logger.info(f"Using simple retrieval for query: {query[:50]}...")
+        results = retrieve_simple(query, top_k, similarity_threshold, where, scheme)
         
-        # Get collection
-        client = get_client()
-        collection = get_or_create_collection(client)
-        
-        # Build metadata filters
-        filters = {}
-        if scheme:
-            filters["scheme_name"] = scheme
-        if where:
-            filters.update(where)
-        
-        # Query vector database
-        logger.info(f"Querying vector database (top_k={top_k})...")
-        results = collection.query(
-            query_embeddings=[embedding],
-            n_results=top_k,
-            where=filters if filters else None,
-            include=["documents", "metadatas", "distances"]
-        )
-        
-        # Process results
-        retrieved_chunks = []
-        for i, doc in enumerate(results["documents"][0]):
-            if results["distances"][0][i] <= (1 - similarity_threshold):  # Convert similarity to distance
-                retrieved_chunks.append({
-                    "text": doc,
-                    "metadata": results["metadatas"][0][i],
-                    "similarity": 1 - results["distances"][0][i],
-                    "distance": results["distances"][0][i]
-                })
-        
-        logger.info(f"Retrieved {len(retrieved_chunks)} chunks (above threshold {similarity_threshold})")
-        return retrieved_chunks
+        logger.info(f"Simple retrieval completed: {len(results)} chunks")
+        return results
         
     except Exception as e:
-        logger.error(f"ChromaDB retrieval failed: {e}")
-        logger.info("Falling back to memory vector store...")
-        
-        # Fallback to memory store
-        try:
-            from phase1.memory_vector_store import get_memory_store, initialize_memory_store
-            
-            store = get_memory_store()
-            if not store.is_loaded:
-                logger.info("Initializing memory store...")
-                if not initialize_memory_store():
-                    logger.error("Failed to initialize memory store!")
-                    return []
-            
-            results = store.query(query, top_k, similarity_threshold)
-            logger.info(f"Memory store retrieved {len(results)} chunks")
-            return results
-            
-        except Exception as fallback_error:
-            logger.error(f"Memory store fallback also failed: {fallback_error}")
-            return []
-    
-    except Exception as e:
-        logger.error(f"Error during retrieval: {e}")
+        logger.error(f"Simple retrieval failed: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
         return []
