@@ -74,7 +74,8 @@ ADVISORY_KEYWORDS = [
     "which fund is better", "which is better", "compare", "performance comparison",
     "buy", "sell", "hold", "investment advice", "suggest",
     "good investment", "is this a good", "better for", "which fund should",
-    "which mutual fund is better", "which fund", "better", "comparison"
+    "which mutual fund is better", "which fund", "better", "comparison",
+    "give money", "money", "invest money", "put money", "how much money"
 ]
 
 FACTUAL_KEYWORDS = [
