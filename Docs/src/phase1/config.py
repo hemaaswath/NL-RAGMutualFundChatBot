@@ -18,13 +18,31 @@ load_dotenv()
 import sys
 from pathlib import Path
 
+# Debug: Log environment info
+import logging
+logger = logging.getLogger(__name__)
+logger.info(f"Current working directory: {os.getcwd()}")
+logger.info(f"STREAMLIT_SERVER_PORT: {os.getenv('STREAMLIT_SERVER_PORT')}")
+logger.info(f"streamlit in sys.modules: {'streamlit' in sys.modules}")
+
 # Check if we're on Streamlit Cloud (different working directory)
-if os.getenv("STREAMLIT_SERVER_PORT") or "streamlit" in sys.modules:
+# Also check if we're in a containerized environment
+is_streamlit_cloud = (
+    os.getenv("STREAMLIT_SERVER_PORT") or 
+    "streamlit" in sys.modules or
+    os.getenv("STREAMLIT_SHARING") or
+    "/app" in os.getcwd()  # Common container path
+)
+logger.info(f"Detected Streamlit Cloud: {is_streamlit_cloud}")
+
+if is_streamlit_cloud:
     # On Streamlit Cloud, use relative paths
     PROJECT_ROOT = Path(".")
+    logger.info("Using relative paths for Streamlit Cloud")
 else:
     # Local development, use absolute paths
     PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+    logger.info("Using absolute paths for local development")
 
 DATA_RAW_DIR = Path(os.getenv("DATA_RAW_DIR", PROJECT_ROOT / "data" / "raw"))
 DATA_PROCESSED_DIR = Path(os.getenv("DATA_PROCESSED_DIR", PROJECT_ROOT / "data" / "processed"))

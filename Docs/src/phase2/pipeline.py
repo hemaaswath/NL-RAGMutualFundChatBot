@@ -132,15 +132,36 @@ def initialize_vector_store() -> None:
 
     try:
         # Debug: Check ChromaDB path
-        from phase1.config import CHROMA_PERSIST_DIR
+        from phase1.config import CHROMA_PERSIST_DIR, PROJECT_ROOT
         logger.info(f"ChromaDB path: {CHROMA_PERSIST_DIR}")
+        logger.info(f"Project root: {PROJECT_ROOT}")
         
-        # Debug: Check if chroma_db exists
-        chroma_path = Path(CHROMA_PERSIST_DIR)
-        if chroma_path.exists():
-            logger.info(f"ChromaDB directory exists with files: {list(chroma_path.rglob('*'))[:5]}")
-        else:
-            logger.warning(f"ChromaDB directory does not exist at: {CHROMA_PERSIST_DIR}")
+        # Try multiple path configurations
+        chroma_paths_to_try = [
+            CHROMA_PERSIST_DIR,
+            "./chroma_db",
+            str(PROJECT_ROOT / "chroma_db"),
+            "chroma_db",
+            "/app/chroma_db",  # Common container path
+        ]
+        
+        working_chroma_path = None
+        for path in chroma_paths_to_try:
+            chroma_path = Path(path)
+            if chroma_path.exists() and any(chroma_path.iterdir()):
+                logger.info(f"Found ChromaDB at: {path}")
+                working_chroma_path = path
+                # Temporarily update the config
+                import phase1.config
+                phase1.config.CHROMA_PERSIST_DIR = path
+                break
+            else:
+                logger.debug(f"ChromaDB not found at: {path}")
+        
+        if not working_chroma_path:
+            logger.error("ChromaDB directory not found in any expected location!")
+            logger.info(f"Current working directory: {os.getcwd()}")
+            logger.info(f"Files in current directory: {list(Path('.').rglob('*')[:10])}")
         
         stats = get_collection_stats()
         total_vectors = stats.get("total_vectors", 0)
