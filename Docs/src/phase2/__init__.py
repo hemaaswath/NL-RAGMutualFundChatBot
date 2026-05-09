@@ -2,7 +2,7 @@
 Phase 2: RAG Pipeline Implementation
 """
 
-from .pipeline import rag_pipeline, get_available_schemes, get_cache_stats, clear_cache
+from .pipeline import rag_pipeline, get_available_schemes, get_cache_stats, clear_cache, initialize_vector_store
 from .retriever import retrieve, retrieve_by_scheme
 from .classifier import classify_query, should_refuse
 from .generator import generate_response
@@ -14,6 +14,7 @@ __all__ = [
     "get_available_schemes",
     "get_cache_stats",
     "clear_cache",
+    "initialize_vector_store",
     "retrieve",
     "retrieve_by_scheme",
     "classify_query",
