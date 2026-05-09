@@ -210,8 +210,9 @@ if submit_button or st.session_state.auto_submit:
                 
                 # Check if we got a valid response
                 if result and 'answer' in result:
-                    if result['chunks_retrieved'] == 0:
-                        st.warning("⚠️ No relevant information found in the database. The vector store may not be properly initialized.")
+                    # Only show warning for factual queries with no chunks, not for advisory refusals
+                    if result['chunks_retrieved'] == 0 and result.get('query_type') != 'advisory':
+                        st.warning("⚠️ No relevant information found in database. The vector store may not be properly initialized.")
             except Exception as e:
                 st.error(f"❌ Error processing your question: {str(e)}")
                 st.session_state.response = None
