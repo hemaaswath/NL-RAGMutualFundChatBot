@@ -27,11 +27,11 @@ wheels/
 *.egg
 
 # Vector database
-chroma_db/
+# chroma_db/  # Uncommented for deployment - commit pre-built vector store
 
 # Cache
 cache/
-*.json
+# *.json  # Uncommented for deployment - commit processed data
 
 # IDE
 .vscode/

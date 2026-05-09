@@ -8,9 +8,9 @@
     "final_url": "https://groww.in/mutual-funds/hdfc-mid-cap-fund-direct-growth",
     "status": 200,
     "error": null,
-    "timestamp": "2026-05-07",
+    "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-mid-cap-fund-direct-growth.html",
-    "html_size": 548422
+    "html_size": 548857
   },
   {
     "scheme_name": "HDFC Equity Fund (Direct Growth)",
@@ -21,9 +21,9 @@
     "final_url": "https://groww.in/mutual-funds/hdfc-equity-fund-direct-growth",
     "status": 200,
     "error": null,
-    "timestamp": "2026-05-07",
+    "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-equity-fund-direct-growth.html",
-    "html_size": 534483
+    "html_size": 534902
   },
   {
     "scheme_name": "HDFC Focused Fund (Direct Growth)",
@@ -34,9 +34,9 @@
     "final_url": "https://groww.in/mutual-funds/hdfc-focused-fund-direct-growth",
     "status": 200,
     "error": null,
-    "timestamp": "2026-05-07",
+    "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-focused-fund-direct-growth.html",
-    "html_size": 502817
+    "html_size": 503180
   },
   {
     "scheme_name": "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
@@ -47,9 +47,9 @@
     "final_url": "https://groww.in/mutual-funds/hdfc-elss-tax-saver-fund-direct-plan-growth",
     "status": 200,
     "error": null,
-    "timestamp": "2026-05-07",
+    "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-elss-tax-saver-fund-direct-plan-growth.html",
-    "html_size": 528121
+    "html_size": 528471
   },
   {
     "scheme_name": "HDFC Large-Cap Fund (Direct Growth)",
@@ -60,8 +60,8 @@
     "final_url": "https://groww.in/mutual-funds/hdfc-large-cap-fund-direct-growth",
     "status": 200,
     "error": null,
-    "timestamp": "2026-05-07",
+    "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-large-cap-fund-direct-growth.html",
-    "html_size": 518510
+    "html_size": 518855
   }
 ]
