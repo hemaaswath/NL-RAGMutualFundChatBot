@@ -14,12 +14,23 @@ load_dotenv()
 # Project Paths
 # ──────────────────────────────────────────────
 
-PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+# For Streamlit Cloud deployment, use relative paths
+import sys
+from pathlib import Path
+
+# Check if we're on Streamlit Cloud (different working directory)
+if os.getenv("STREAMLIT_SERVER_PORT") or "streamlit" in sys.modules:
+    # On Streamlit Cloud, use relative paths
+    PROJECT_ROOT = Path(".")
+else:
+    # Local development, use absolute paths
+    PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent.parent
+
 DATA_RAW_DIR = Path(os.getenv("DATA_RAW_DIR", PROJECT_ROOT / "data" / "raw"))
 DATA_PROCESSED_DIR = Path(os.getenv("DATA_PROCESSED_DIR", PROJECT_ROOT / "data" / "processed"))
 DATA_CHUNKS_DIR = Path(os.getenv("DATA_CHUNKS_DIR", PROJECT_ROOT / "data" / "chunks"))
-# Use absolute path for ChromaDB to ensure it works on deployment
-CHROMA_PERSIST_DIR = str(Path(os.getenv("CHROMA_PERSIST_DIR", PROJECT_ROOT / "chroma_db")).resolve())
+# Use relative path for ChromaDB to work on Streamlit Cloud deployment
+CHROMA_PERSIST_DIR = os.getenv("CHROMA_PERSIST_DIR", "./chroma_db")
 DOCS_PHASE1_DIR = PROJECT_ROOT / "Docs" / "Phase1_DataCollection"
 
 # ──────────────────────────────────────────────
