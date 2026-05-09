@@ -36,10 +36,8 @@ logger = get_logger(__name__)
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     logger.info("Starting RAG Mutual Fund FAQ Assistant API...")
-    # Skip auto-initialization on deployment since processed data doesn't exist
-    # Data must be built via scheduler or local testing first
-    # from phase2.pipeline import initialize_vector_store
-    # initialize_vector_store()
+    from phase2.pipeline import initialize_vector_store
+    initialize_vector_store()
     yield
     logger.info("Shutting down RAG Mutual Fund FAQ Assistant API...")
 
