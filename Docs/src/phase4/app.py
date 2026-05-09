@@ -20,11 +20,12 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).parent.parent.parent / "src"))
 
 import streamlit as st
-from phase2.pipeline import rag_pipeline, get_available_schemes, initialize_vector_store
+from phase2.pipeline import rag_pipeline, get_available_schemes, get_schemes_list, initialize_vector_store
 
 # ──────────────────────────────────────────────
 # Page Configuration
 # ──────────────────────────────────────────────
+# VERSION: 2.0 - Complete ChromaDB bypass
 st.set_page_config(
     page_title="RAG Mutual Fund FAQ Assistant",
     page_icon="💰",
@@ -128,7 +129,7 @@ _ensure_initialized()
 st.markdown("### 💡 Example Questions")
 
 # Get available schemes for dynamic examples
-schemes = get_available_schemes()
+schemes = get_schemes_list()
 example_questions = [
     f"What is the expense ratio of {schemes[0] if schemes else 'HDFC Mid Cap Fund'}?",
     f"What is the exit load for {schemes[1] if len(schemes) > 1 else 'HDFC Large Cap Fund'}?",

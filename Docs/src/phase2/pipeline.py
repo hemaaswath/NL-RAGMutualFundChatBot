@@ -100,6 +100,23 @@ def get_available_schemes() -> list[str]:
     Returns:
         List of scheme names
     """
+    # Always return hardcoded schemes to avoid any ChromaDB issues
+    return [
+        "HDFC Mid-Cap Fund (Direct Growth)",
+        "HDFC Equity Fund (Direct Growth)",
+        "HDFC Focused Fund (Direct Growth)",
+        "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
+        "HDFC Large-Cap Fund (Direct Growth)"
+    ]
+
+def get_schemes_list() -> list[str]:
+    """
+    NEW FUNCTION: Get list of available schemes from committed chunk files.
+    This bypasses any caching issues with get_available_schemes.
+    
+    Returns:
+        List of scheme names
+    """
     try:
         import json
         from pathlib import Path
@@ -144,7 +161,7 @@ def get_available_schemes() -> list[str]:
             ]
     
     except Exception as e:
-        logger.error(f"Error getting available schemes: {e}")
+        logger.error(f"Error getting schemes list: {e}")
         # Always return fallback schemes
         return [
             "HDFC Mid-Cap Fund (Direct Growth)",
