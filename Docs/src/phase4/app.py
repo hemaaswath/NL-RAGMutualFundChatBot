@@ -103,14 +103,18 @@ Simply ask your question below, and I'll retrieve relevant information from offi
 # ──────────────────────────────────────────────
 # Initialize Vector Store (runs once per session)
 # ──────────────────────────────────────────────
-# Skip auto-initialization on deployment since processed data doesn't exist
-# Data must be built via scheduler or local testing first
-# @st.cache_resource
-# def _ensure_initialized():
-#     initialize_vector_store()
-#     return True
+@st.cache_resource
+def _ensure_initialized():
+    try:
+        initialize_vector_store()
+        return True
+    except Exception as e:
+        st.error(f"Failed to initialize vector store: {e}")
+        st.warning("The app will continue but may not provide answers to queries.")
+        return False
 
-# _ensure_initialized()
+# Try to initialize, but don't fail if it doesn't work
+_ensure_initialized()
 
 # ──────────────────────────────────────────────
 # Example Questions
@@ -196,6 +200,11 @@ if submit_button or st.session_state.auto_submit:
                 result = rag_pipeline(query, use_cache=True)
                 st.session_state.response = result
                 st.session_state.query_input = query  # Save the query
+                
+                # Check if we got a valid response
+                if result and 'answer' in result:
+                    if result['chunks_retrieved'] == 0:
+                        st.warning("⚠️ No relevant information found in the database. The vector store may not be properly initialized.")
             except Exception as e:
                 st.error(f"❌ Error processing your question: {str(e)}")
                 st.session_state.response = None

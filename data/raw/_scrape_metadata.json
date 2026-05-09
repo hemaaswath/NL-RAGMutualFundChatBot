@@ -10,7 +10,7 @@
     "error": null,
     "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-mid-cap-fund-direct-growth.html",
-    "html_size": 548857
+    "html_size": 548768
   },
   {
     "scheme_name": "HDFC Equity Fund (Direct Growth)",
@@ -23,7 +23,7 @@
     "error": null,
     "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-equity-fund-direct-growth.html",
-    "html_size": 534902
+    "html_size": 534839
   },
   {
     "scheme_name": "HDFC Focused Fund (Direct Growth)",
@@ -36,7 +36,7 @@
     "error": null,
     "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-focused-fund-direct-growth.html",
-    "html_size": 503180
+    "html_size": 503179
   },
   {
     "scheme_name": "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
@@ -49,7 +49,7 @@
     "error": null,
     "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-elss-tax-saver-fund-direct-plan-growth.html",
-    "html_size": 528471
+    "html_size": 528461
   },
   {
     "scheme_name": "HDFC Large-Cap Fund (Direct Growth)",
@@ -62,6 +62,6 @@
     "error": null,
     "timestamp": "2026-05-09",
     "html_path": "data\\raw\\hdfc-large-cap-fund-direct-growth.html",
-    "html_size": 518855
+    "html_size": 518732
   }
 ]
