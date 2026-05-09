@@ -4,8 +4,14 @@ Streamlit-based FAQ Assistant Interface
 """
 
 import os
-# Disable ChromaDB telemetry before any imports
+# Disable ALL telemetry before any imports
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_TELEMETRY"] = "False"
+os.environ["CHROMA_SERVER_HOST"] = "localhost"
+os.environ["CHROMA_SERVER_HTTP_PORT"] = "8000"
+os.environ["POSTHOG_DISABLED"] = "true"
+os.environ["POSTHOG_HOST"] = "https://app.posthog.com"
+os.environ["POSTHOG_API_KEY"] = ""
 
 import sys
 from pathlib import Path

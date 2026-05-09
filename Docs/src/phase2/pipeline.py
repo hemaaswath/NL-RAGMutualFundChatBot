@@ -95,22 +95,22 @@ def rag_pipeline(
 
 def get_available_schemes() -> list[str]:
     """
-    Get list of available schemes from the vector database.
+    Get list of available schemes from the simple vector store.
     
     Returns:
         List of scheme names
     """
-    from phase1.vector_store import get_client, get_or_create_collection
-    
     try:
-        client = get_client()
-        collection = get_or_create_collection(client)
+        from .simple_retriever import get_simple_store, initialize_simple_store
         
-        results = collection.get(include=["metadatas"])
+        store = get_simple_store()
+        if not store.loaded:
+            if not initialize_simple_store():
+                return []
+        
         scheme_names = set()
-        
-        for metadata in results["metadatas"]:
-            scheme_names.add(metadata["scheme_name"])
+        for chunk in store.chunks:
+            scheme_names.add(chunk['metadata']['scheme_name'])
         
         return sorted(list(scheme_names))
     
