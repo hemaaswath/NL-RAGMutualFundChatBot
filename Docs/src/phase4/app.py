@@ -25,7 +25,7 @@ from phase2.pipeline import rag_pipeline, get_available_schemes, get_schemes_lis
 # ──────────────────────────────────────────────
 # Page Configuration
 # ──────────────────────────────────────────────
-# VERSION: 2.1 - Fixed advisory warning issue
+# VERSION: 2.2 - Deployment optimizations with caching
 st.set_page_config(
     page_title="RAG Mutual Fund FAQ Assistant",
     page_icon="💰",
@@ -110,18 +110,20 @@ Simply ask your question below, and I'll retrieve relevant information from offi
 # ──────────────────────────────────────────────
 # Initialize Vector Store (runs once per session)
 # ──────────────────────────────────────────────
-@st.cache_resource
-def _ensure_initialized():
+@st.cache_resource(show_spinner="Loading vector store...")
+def get_initialized_retriever():
+    """Lazy load vector store only when needed."""
     try:
-        initialize_vector_store()
+        from phase2.optimized_retriever import get_optimized_retriever
+        retriever = get_optimized_retriever()
+        retriever._ensure_loaded()  # Pre-load for faster queries
         return True
     except Exception as e:
         st.error(f"Failed to initialize vector store: {e}")
-        st.warning("The app will continue but may not provide answers to queries.")
         return False
 
 # Try to initialize, but don't fail if it doesn't work
-_ensure_initialized()
+get_initialized_retriever()
 
 # ──────────────────────────────────────────────
 # Example Questions

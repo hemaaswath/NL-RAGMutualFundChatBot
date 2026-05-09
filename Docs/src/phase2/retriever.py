@@ -11,38 +11,36 @@ from .utils import setup_logging
 logger = setup_logging("retriever")
 
 
-def retrieve(
-    query: str,
-    top_k: int = TOP_K,
-    similarity_threshold: float = SIMILARITY_THRESHOLD,
-    where: Optional[dict] = None,
-    scheme: Optional[str] = None,
-) -> list[dict]:
+def retrieve(query: str, top_k: int = 5, similarity_threshold: float = 0.3) -> List[Dict]:
     """
-    Retrieve relevant chunks using simple file-based vector store.
+    Retrieve relevant chunks using the optimized file-based approach.
     
     Args:
-        query: User query text
+        query: User query string
         top_k: Number of results to retrieve
-        similarity_threshold: Minimum similarity score (0-1)
-        where: Additional metadata filters (not implemented)
-        scheme: Filter by specific scheme name
+        similarity_threshold: Minimum similarity score
     
     Returns:
-        List of retrieved chunks with metadata and scores
+        List of relevant chunks with similarity scores
     """
+    logger.info(f"Using optimized retrieval for query: {query[:50]}...")
+    
     try:
-        # Use simple retriever for Streamlit deployment
-        from .simple_retriever import retrieve_simple
+        from .optimized_retriever import retrieve_optimized
         
-        logger.info(f"Using simple retrieval for query: {query[:50]}...")
-        results = retrieve_simple(query, top_k, similarity_threshold, where, scheme)
+        # Use optimized retrieval with caching and lazy loading
+        results = retrieve_optimized(query, top_k, similarity_threshold)
         
-        logger.info(f"Simple retrieval completed: {len(results)} chunks")
-        return results
+        # Convert to expected format
+        chunks = []
+        for result in results:
+            chunks.append(result['chunk'])
+        
+        logger.info(f"Optimized retrieval completed: {len(chunks)} chunks")
+        return chunks
         
     except Exception as e:
-        logger.error(f"Simple retrieval failed: {e}")
+        logger.error(f"Optimized retrieval failed: {e}")
         import traceback
         logger.error(f"Traceback: {traceback.format_exc()}")
         return []
