@@ -5,8 +5,11 @@ Vector store management for ChromaDB.
 import os
 from .config import CHROMA_PERSIST_DIR, CHROMA_COLLECTION_NAME
 
-# Disable ChromaDB telemetry
+# Completely disable ChromaDB telemetry
 os.environ["ANONYMIZED_TELEMETRY"] = "False"
+os.environ["CHROMA_TELEMETRY"] = "False"
+os.environ["CHROMA_SERVER_HOST"] = "localhost"
+os.environ["CHROMA_SERVER_HTTP_PORT"] = "8000"
 
 import chromadb
 

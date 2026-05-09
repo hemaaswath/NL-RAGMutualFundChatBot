@@ -129,10 +129,26 @@ def initialize_vector_store() -> None:
     from pathlib import Path
     import json
     import os
+    import shutil
 
     logger.info("Checking vector store initialization...")
 
     try:
+        # SCHEMA FIX: Delete existing ChromaDB to avoid schema incompatibility
+        from phase1.config import CHROMA_PERSIST_DIR
+        chroma_path = Path(CHROMA_PERSIST_DIR)
+        
+        # Check if we're on deployment (Streamlit Cloud)
+        is_deployment = os.getenv("STREAMLIT_SERVER_PORT") or "/app" in os.getcwd()
+        
+        if is_deployment and chroma_path.exists():
+            logger.warning("Deployment detected - deleting existing ChromaDB to avoid schema issues...")
+            try:
+                shutil.rmtree(chroma_path)
+                logger.info(f"Deleted existing ChromaDB at: {chroma_path}")
+            except Exception as e:
+                logger.error(f"Failed to delete ChromaDB: {e}")
+        
         # AGGRESSIVE FIX: Always try to rebuild from committed chunks on deployment
         # This bypasses all path detection issues
         logger.info("Attempting aggressive fix - rebuilding from committed chunks...")
