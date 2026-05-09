@@ -55,39 +55,49 @@ def retrieve(
         
         # Query vector database
         logger.info(f"Querying vector database (top_k={top_k})...")
-        kwargs = {
-            "query_embeddings": [embedding],
-            "n_results": top_k,
-                        "metadata": results["metadatas"][0][i],
-                        "similarity": 1 - results["distances"][0][i],
-                        "distance": results["distances"][0][i]
-                    })
-            
-            logger.info(f"Retrieved {len(retrieved_chunks)} chunks (above threshold {similarity_threshold})")
-            return retrieved_chunks
+        results = collection.query(
+            query_embeddings=[embedding],
+            n_results=top_k,
+            where=filters if filters else None,
+            include=["documents", "metadatas", "distances"]
+        )
         
-        except Exception as e:
-            logger.error(f"ChromaDB retrieval failed: {e}")
-            logger.info("Falling back to memory vector store...")
+        # Process results
+        retrieved_chunks = []
+        for i, doc in enumerate(results["documents"][0]):
+            if results["distances"][0][i] <= (1 - similarity_threshold):  # Convert similarity to distance
+                retrieved_chunks.append({
+                    "text": doc,
+                    "metadata": results["metadatas"][0][i],
+                    "similarity": 1 - results["distances"][0][i],
+                    "distance": results["distances"][0][i]
+                })
+        
+        logger.info(f"Retrieved {len(retrieved_chunks)} chunks (above threshold {similarity_threshold})")
+        return retrieved_chunks
+        
+    except Exception as e:
+        logger.error(f"ChromaDB retrieval failed: {e}")
+        logger.info("Falling back to memory vector store...")
+        
+        # Fallback to memory store
+        try:
+            from phase1.memory_vector_store import get_memory_store, initialize_memory_store
             
-            # Fallback to memory store
-            try:
-                from phase1.memory_vector_store import get_memory_store, initialize_memory_store
-                
-                store = get_memory_store()
-                if not store.is_loaded:
-                    logger.info("Initializing memory store...")
-                    if not initialize_memory_store():
-                        logger.error("Failed to initialize memory store!")
-                        return []
-                
-                results = store.query(query, top_k, similarity_threshold)
-                logger.info(f"Memory store retrieved {len(results)} chunks")
-                return results
-                
-            except Exception as fallback_error:
-                logger.error(f"Memory store fallback also failed: {fallback_error}")
-                return []
+            store = get_memory_store()
+            if not store.is_loaded:
+                logger.info("Initializing memory store...")
+                if not initialize_memory_store():
+                    logger.error("Failed to initialize memory store!")
+                    return []
+            
+            results = store.query(query, top_k, similarity_threshold)
+            logger.info(f"Memory store retrieved {len(results)} chunks")
+            return results
+            
+        except Exception as fallback_error:
+            logger.error(f"Memory store fallback also failed: {fallback_error}")
+            return []
     
     except Exception as e:
         logger.error(f"Error during retrieval: {e}")
