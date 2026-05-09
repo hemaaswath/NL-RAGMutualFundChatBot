@@ -25,7 +25,7 @@ from phase2.pipeline import rag_pipeline, get_available_schemes, get_schemes_lis
 # ──────────────────────────────────────────────
 # Page Configuration
 # ──────────────────────────────────────────────
-# VERSION: 2.0 - Complete ChromaDB bypass
+# VERSION: 2.1 - Fixed advisory warning issue
 st.set_page_config(
     page_title="RAG Mutual Fund FAQ Assistant",
     page_icon="💰",
@@ -211,7 +211,10 @@ if submit_button or st.session_state.auto_submit:
                 # Check if we got a valid response
                 if result and 'answer' in result:
                     # Only show warning for factual queries with no chunks, not for advisory refusals
-                    if result['chunks_retrieved'] == 0 and result.get('query_type') != 'advisory':
+                    query_type = result.get('query_type', '').lower()
+                    is_advisory = query_type == 'advisory' or 'refusal_type' in result
+                    
+                    if result['chunks_retrieved'] == 0 and not is_advisory:
                         st.warning("⚠️ No relevant information found in database. The vector store may not be properly initialized.")
             except Exception as e:
                 st.error(f"❌ Error processing your question: {str(e)}")
