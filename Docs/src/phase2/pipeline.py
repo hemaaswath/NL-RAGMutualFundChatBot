@@ -95,28 +95,64 @@ def rag_pipeline(
 
 def get_available_schemes() -> list[str]:
     """
-    Get list of available schemes from the simple vector store.
+    Get list of available schemes from committed chunk files.
     
     Returns:
         List of scheme names
     """
     try:
-        from .simple_retriever import get_simple_store, initialize_simple_store
+        import json
+        from pathlib import Path
         
-        store = get_simple_store()
-        if not store.loaded:
-            if not initialize_simple_store():
-                return []
+        # Try multiple paths for chunks
+        chunk_paths = [
+            "data/chunks",
+            "./data/chunks",
+            "Docs/src/data/chunks",
+            "./Docs/src/data/chunks",
+            "/app/data/chunks",
+            str(Path.cwd() / "data" / "chunks"),
+        ]
         
         scheme_names = set()
-        for chunk in store.chunks:
-            scheme_names.add(chunk['metadata']['scheme_name'])
         
-        return sorted(list(scheme_names))
+        for chunk_path in chunk_paths:
+            chunks_dir = Path(chunk_path)
+            if chunks_dir.exists() and any(chunks_dir.iterdir()):
+                for chunk_file in chunks_dir.glob("*_chunks.json"):
+                    try:
+                        with open(chunk_file, 'r', encoding='utf-8') as f:
+                            chunks = json.load(f)
+                            for chunk in chunks:
+                                scheme_names.add(chunk['metadata']['scheme_name'])
+                        logger.info(f"Loaded schemes from {chunk_file.name}")
+                    except Exception as e:
+                        logger.error(f"Error loading {chunk_file}: {e}")
+                break
+        
+        if scheme_names:
+            return sorted(list(scheme_names))
+        else:
+            # Fallback to hardcoded schemes if no chunks found
+            logger.warning("No chunks found, using fallback schemes")
+            return [
+                "HDFC Mid-Cap Fund (Direct Growth)",
+                "HDFC Equity Fund (Direct Growth)",
+                "HDFC Focused Fund (Direct Growth)",
+                "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
+                "HDFC Large-Cap Fund (Direct Growth)"
+            ]
     
     except Exception as e:
         logger.error(f"Error getting available schemes: {e}")
-        return []
+        # Always return fallback schemes
+        return [
+            "HDFC Mid-Cap Fund (Direct Growth)",
+            "HDFC Equity Fund (Direct Growth)",
+            "HDFC Focused Fund (Direct Growth)",
+            "HDFC ELSS Tax Saver Fund (Direct Plan Growth)",
+            "HDFC Large-Cap Fund (Direct Growth)"
+        ]
 
 
 def initialize_vector_store() -> None:
