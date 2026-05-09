@@ -146,8 +146,16 @@ def initialize_vector_store() -> None:
         total_vectors = stats.get("total_vectors", 0)
         logger.info(f"Vector store stats: {stats}")
 
+        # Force rebuild if empty or if we're on deployment (always check chunks)
         if total_vectors > 0:
             logger.info(f"Vector store already initialized ({total_vectors} vectors)")
+            # Still check if we have chunks to ensure data is fresh
+            from phase1.config import DATA_CHUNKS_DIR
+            chunks_dir = Path(DATA_CHUNKS_DIR)
+            if chunks_dir.exists() and any(chunks_dir.iterdir()):
+                logger.info("Chunks directory exists, vector store should be working")
+            else:
+                logger.warning("Chunks directory not found, may need to rebuild")
             return
 
         logger.warning("Vector store is empty. Building from processed data...")
@@ -168,6 +176,29 @@ def initialize_vector_store() -> None:
 
         result = upsert_chunks(chunks)
         logger.info(f"Vector store initialized: {result['success']} chunks indexed")
+        
+        # Verify the vector store now has data
+        stats = get_collection_stats()
+        total_vectors = stats.get("total_vectors", 0)
+        logger.info(f"After initialization - Vector store stats: {stats}")
+        
+        if total_vectors == 0:
+            logger.error("Vector store still empty after initialization!")
+            # Try one more time with direct chunk loading
+            logger.warning("Attempting direct chunk loading...")
+            from phase1.config import DATA_CHUNKS_DIR
+            import json
+            chunks_dir = Path(DATA_CHUNKS_DIR)
+            if chunks_dir.exists():
+                chunks = []
+                for chunk_file in chunks_dir.glob("*_chunks.json"):
+                    with open(chunk_file, 'r', encoding='utf-8') as f:
+                        file_chunks = json.load(f)
+                        chunks.extend(file_chunks)
+                if chunks:
+                    logger.info(f"Loaded {len(chunks)} chunks directly from files")
+                    result = upsert_chunks(chunks)
+                    logger.info(f"Direct load result: {result}")
     except Exception as e:
         logger.error(f"Vector store initialization failed: {e}")
         import traceback
