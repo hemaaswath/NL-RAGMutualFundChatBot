@@ -39,7 +39,7 @@ CHROMA_COLLECTION_NAME = os.getenv("CHROMA_COLLECTION_NAME", "mutual_fund_faq")
 # Retrieval Configuration
 # ──────────────────────────────────────────────
 TOP_K = int(os.getenv("TOP_K", "5"))  # Number of results to retrieve
-SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.5"))  # Minimum similarity score (lowered for better recall)
+SIMILARITY_THRESHOLD = float(os.getenv("SIMILARITY_THRESHOLD", "0.3"))  # Lowered for better SIP amount retrieval
 MAX_CONTEXT_TOKENS = int(os.getenv("MAX_CONTEXT_TOKENS", "2000"))  # Max tokens in context
 
 # ──────────────────────────────────────────────
